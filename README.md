@@ -1,7 +1,5 @@
 # LMS App (Laravel) — Programming Courses
  
- This is a Learning Management System (LMS) built with Laravel for programming courses. It supports three user roles (Admin, Instructor, Student), course management with video/file uploads, assignments and grading, per-course discussions, progress tracking, and certificates.
- 
  ## Features
  - User Roles: Admin, Instructor, Student
  - Course Management: Courses with materials (videos, PDFs, docs), instructor ownership
@@ -9,18 +7,7 @@
  - Discussions: Threaded discussions and replies per course
  - Progress Tracking: Track completed materials per student
  - Certificates: Auto-issued for completed progress
- 
- ## Tech Stack
- - Backend: Laravel PHP Framework
- - Database: MySQL
- - Frontend tooling: Vite (default Laravel setup)
- 
- ## Prerequisites
- - PHP 8.2+
- - Composer 2+
- - MySQL 8+ (or compatible)
- - Node.js 18+ (for Vite asset building, optional for API-only usage)
- 
+
  ## Getting Started
  1. Install dependencies
     - Composer: `composer install`
@@ -37,8 +24,8 @@
     DB_HOST=127.0.0.1
     DB_PORT=3306
     DB_DATABASE=lms_app
-    DB_USERNAME=your_user
-    DB_PASSWORD=your_password
+    DB_USERNAME=root
+    DB_PASSWORD=
     ```
  
  4. Run migrations (creates tables)
@@ -50,13 +37,8 @@
     ```bash
     php artisan db:seed
     ```
- 
- 6. (Optional) Link storage for public file access
-    ```bash
-    php artisan storage:link
-    ```
- 
- 7. Serve the application
+    
+ 6. Serve the application
     ```bash
     php artisan serve
     ```
@@ -83,11 +65,6 @@
  - Seed all dev data: `php artisan db:seed`
  - Fresh DB (drop all, migrate, seed): `php artisan migrate:fresh --seed`
  
- ## Notes
- - The project includes only file path placeholders for materials/submissions in seeds. Use `storage:link` to expose storage if you plan to upload/view files locally.
- - You may adjust or extend the seeders in `database/seeders/` to fit your development needs.
- 
- ---
  
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 

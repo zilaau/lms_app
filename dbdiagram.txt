@@ -1,0 +1,149 @@
+Table roles {
+  id integer [pk, increment]
+  name varchar(50) [not null, unique]
+  description varchar(255)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table users {
+  id integer [pk, increment]
+  role_id integer [not null]
+  name varchar(100) [not null]
+  email varchar(150) [not null, unique]
+  password varchar(255) [not null]
+  phone varchar(30)
+  remember_token varchar(100)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table courses {
+  id integer [pk, increment]
+  title varchar(200) [not null]
+  description text
+  instructor_id integer [not null]
+  thumbnail varchar(255)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table course_enrollments {
+  id integer [pk, increment]
+  course_id integer [not null]
+  student_id integer [not null]
+  enrolled_at timestamp [default: `now()`]
+  completed_at timestamp
+  progress_percentage integer [default: 0]
+  certificate_issued_at timestamp
+  created_at timestamp
+  updated_at timestamp
+
+  Indexes {
+    (course_id, student_id) [unique]
+  }
+}
+
+Table course_materials {
+  id integer [pk, increment]
+  course_id integer [not null]
+  title varchar(200) [not null]
+  description text
+  file_path varchar(255) [not null]
+  file_type varchar(50) [not null] // e.g., video, pdf, document
+  order_index integer [default: 0]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table assignments {
+  id integer [pk, increment]
+  course_id integer [not null]
+  title varchar(200) [not null]
+  description text
+  due_date timestamp
+  max_points integer [default: 100]
+  instructions text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table assignment_submissions {
+  id integer [pk, increment]
+  assignment_id integer [not null]
+  student_id integer [not null]
+  file_path varchar(255)
+  submitted_at timestamp [default: `now()`]
+  grade decimal(5,2)
+  feedback text
+  graded_at timestamp
+  graded_by integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table discussions {
+  id integer [pk, increment]
+  course_id integer [not null]
+  title varchar(200) [not null]
+  description text
+  created_by integer [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table discussion_replies {
+  id integer [pk, increment]
+  discussion_id integer [not null]
+  user_id integer [not null]
+  content text [not null]
+  parent_id integer
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table progress_tracking {
+  id integer [pk, increment]
+  user_id integer [not null]
+  course_id integer [not null]
+  material_id integer [not null]
+  completed_at timestamp
+  created_at timestamp
+  updated_at timestamp
+
+  Indexes {
+    (user_id, material_id) [unique]
+  }
+}
+
+Table certificates {
+  id integer [pk, increment]
+  user_id integer [not null]
+  course_id integer [not null]
+  certificate_number varchar(50) [not null, unique]
+  issued_at timestamp [default: `now()`]
+  certificate_path varchar(255) [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+// Relationships
+Ref: users.role_id > roles.id
+Ref: courses.instructor_id > users.id
+Ref: course_enrollments.course_id > courses.id
+Ref: course_enrollments.student_id > users.id
+Ref: course_materials.course_id > courses.id
+Ref: assignments.course_id > courses.id
+Ref: assignment_submissions.assignment_id > assignments.id
+Ref: assignment_submissions.student_id > users.id
+Ref: assignment_submissions.graded_by > users.id
+Ref: discussions.course_id > courses.id
+Ref: discussions.created_by > users.id
+Ref: discussion_replies.discussion_id > discussions.id
+Ref: discussion_replies.user_id > users.id
+Ref: discussion_replies.parent_id > discussion_replies.id
+Ref: progress_tracking.user_id > users.id
+Ref: progress_tracking.course_id > courses.id
+Ref: progress_tracking.material_id > course_materials.id
+Ref: certificates.user_id > users.id
+Ref: certificates.course_id > courses.id
